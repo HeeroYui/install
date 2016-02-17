@@ -20,7 +20,9 @@ Builder
 -------
 
   pacman -S clang gcc cmake
+  
   pip install lutin --user
+  
   pip install pillow --user
 
 
