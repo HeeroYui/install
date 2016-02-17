@@ -10,7 +10,7 @@ Install players
 Encode DVD
 ----------
 
-  pacman -S handbrake libdvdread
+  pacman -S handbrake libdvdread libdvdcss dvdnav
   
 
 Transcode TV
