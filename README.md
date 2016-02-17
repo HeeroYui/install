@@ -1,0 +1,1 @@
+Install document for Archlinux
