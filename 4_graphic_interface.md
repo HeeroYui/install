@@ -1,0 +1,4 @@
+gui
+```
+pacman -S cinnamon
+```
