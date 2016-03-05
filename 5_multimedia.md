@@ -12,7 +12,7 @@ Encode DVD
 ----------
 
 ```
-pacman -S handbrake libdvdread libdvdcss dvdnav
+pacman -S handbrake libdvdread libdvdcss libdvdnav
 ```  
 
 Transcode TV
