@@ -1,8 +1,9 @@
 basic Tools:
 ============
 
-  pacman -S terminator
-  
+```
+pacman -S terminator
+```  
 
 
 
