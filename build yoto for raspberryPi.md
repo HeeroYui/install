@@ -3,7 +3,19 @@ Raspberry Pi with Yocto
 
 Install dependency:
 ```
+su
 pacman -S diffstat chrpath cpio
+exit
+```
+
+configure locals:
+```
+su
+locale -a
+edn /etc/locale.gen
+  unselect at minimum en_US.UTF-8 UTF-8
+locale-gen
+exit
 ```
 
 1) set-up working directory:
@@ -124,3 +136,14 @@ sudo dd bs=1M if=core-image-minimal-raspberrypi.rpi-sdimg of=/dev/mmcblk0
 
 login: ```root```
 pasword ```root```
+
+some yocto options:
+===================
+in the file: ```conf/local.conf```
+# mumber of distinct lib to compile at the same time
+BB_NUMBER_THREADS = "4"
+# number of thread fore eache build
+PARALLEL_MAKE = "-j 4"
+
+
+============
