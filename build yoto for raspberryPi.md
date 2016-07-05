@@ -1,6 +1,11 @@
 Raspberry Pi with Yocto
 =======================
 
+Install dependency:
+```
+pacman -S diffstat chrpath cpio
+```
+
 1) set-up working directory:
 ----------------------------
 
