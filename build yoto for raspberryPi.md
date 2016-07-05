@@ -53,7 +53,7 @@ source oe-init-build-env raspberryPiBuild/
 7) update configuration file:
 -----------------------------
 
-Open: ```local.conf```
+Open: ```conf/local.conf```
 
 find: ```MACHINE ??= "qemux86"```
 
@@ -68,7 +68,6 @@ Remplace with: ```PACKAGE_CLASSES ?= "package_deb"```
 Add at the end:
 ```
 BBMASK = "meta-raspberrypi/recipes-multimedia/libav|meta-raspberrypi/recipes-core/systemd"
-BBMASK = "meta-raspberrypi/recipes-multimedia/libav|meta-raspberrypi/recipes-core/systemd"
 ```
 
 Open: ```conf/bblayers.conf```
@@ -76,20 +75,21 @@ Open: ```conf/bblayers.conf```
 find:
 ```
 BBLAYERS ?= " \
-  /home/util01/RASPBERRYPI/BSP/poky/meta \
-  /home/util01/RASPBERRYPI/BSP/poky/meta-yocto \
-  /home/util01/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
   "
 ```
 
 Remplace with:
 ```
 BBLAYERS ?= " \
-  /home/util01/RASPBERRYPI/BSP/poky/meta \
-  /home/util01/RASPBERRYPI/BSP/poky/meta-yocto \
-  /home/util01/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
-  /home/util01/RASPBERRYPI/BSP/poky/meta-raspberrypi \
-  /home/util01/RASPBERRYPI/BSP/poky/meta-oe/meta-oe \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-raspberrypi \
+  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-openembedded/meta-oe \
+  "
 ```
 
 8) Build basic image:
