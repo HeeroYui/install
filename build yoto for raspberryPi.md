@@ -21,14 +21,14 @@ cd poky/
 ---------------------------------
 
 ```
-git clone -b dora https://github.com/djwillis/meta-raspberrypi.git
+git clone -b krogoth https://github.com/djwillis/meta-raspberrypi.git
 ```
 
 4) Clone of meta Open Embedded:
 -------------------------------
 
 ```
-git clone -b dora https://github.com/openembedded/meta-openembedded.git
+git clone -b krogoth https://github.com/openembedded/meta-openembedded.git
 ```
 
 5) Force python 2.7:
@@ -57,7 +57,7 @@ Open: ```conf/local.conf```
 
 find: ```MACHINE ??= "qemux86"```
 
-Remplace with: ```MACHINE ?= "raspberrypi"```
+Remplace with: ```MACHINE ?= "raspberrypi2"```
 
 find: ```PACKAGE_CLASSES ?= "package_rpm"```
 
@@ -75,20 +75,21 @@ Open: ```conf/bblayers.conf```
 find:
 ```
 BBLAYERS ?= " \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-yocto \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
   "
 ```
 
 Remplace with:
 ```
 BBLAYERS ?= " \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-raspberrypi \
-  /home/DoctorWho/RASPBERRYPI/BSP/poky/meta-openembedded/meta-oe \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-yocto \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-yocto-bsp \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-raspberrypi \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-openembedded/meta-oe \
+  ${HOME}/RASPBERRYPI/BSP/poky/meta-openembedded/meta-networking \
   "
 ```
 
