@@ -13,7 +13,7 @@ cd RASPBERRYPI/BSP
 ------------------
 
 ```
-git clone -b dora git://git.yoctoproject.org/poky.git
+git clone -b krogoth git://git.yoctoproject.org/poky.git
 cd poky/
 ```
 
