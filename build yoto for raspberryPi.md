@@ -21,7 +21,7 @@ cd poky/
 ---------------------------------
 
 ```
-git clone -b master https://github.com/djwillis/meta-raspberrypi.git
+git clone -b master git://git.yoctoproject.org/meta-raspberrypi
 ```
 
 4) Clone of meta Open Embedded:
