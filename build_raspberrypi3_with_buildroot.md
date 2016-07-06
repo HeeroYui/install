@@ -10,7 +10,8 @@ git clone http://git.buildroot.net/buildroot
 git clone git://git.busybox.net/buildroot
 cd buildroot
 make raspberrypi3_defconfig
-#make menuconfig
+make menuconfig
+  toolchain -> Enable stack protection support ==> set at true
 make -j8
 ```
 
@@ -19,5 +20,7 @@ Now the kernel and all that is needed to sater has been created in ```output``` 
 Now we need to install toolchain and basis headers:
 
 ```
+expoort TOOLCHAIN_PATH=../generate-toolchain
+mkdir -p $TOOLCHAIN_PATH
 
 ```
