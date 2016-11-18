@@ -7,7 +7,10 @@ pacman -S cinnamon
 set auto-start
 --------------
 ```
-echo exec cinnamon-session-cinnamon2d > ~/.xinitrc
+# when no graphic engine
+echo \#exec cinnamon-session-cinnamon2d > ~/.xinitrc
+# With graphic engine
+echo exec cinnamon-session >> ~/.xinitrc
 ```
 
 other gui tools
