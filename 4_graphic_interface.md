@@ -35,3 +35,14 @@ pacman -S virtualgl
 glxspheres64
 # here we will know how the graphic interfae is run
 ```
+
+
+Start automaticly the X when first log
+---------------------------------------
+```
+# start X
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+# force lang of output in english ==> better for developpement
+LANG=en_US.UTF-8
+```
+
