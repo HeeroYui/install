@@ -26,7 +26,7 @@ Check the Cart graphic corectly install
 # list the output card : (permit to know wich graphic ard we have)
 lspci | grep VGA
 # install all the graphic card drivers:
-pacman -S xorg xorg-drivers
+pacman -S xorg xorg-drivers xorg-xinit
 # restart computer
 # ...
 # install bench tool
