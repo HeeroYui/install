@@ -93,7 +93,9 @@ mymainmenu = awful.menu({ items = { { "awesome",      myawesomemenu, beautiful.a
 
 Add a shortcut to lock screen
 ```
-
+-- {{{ Key bindings
+globalkeys = awful.util.table.join(
+    awful.key({ modkey,           }, "z",      function () awful.util.spawn("xlock") end), -- this to add
 ```
 
 
