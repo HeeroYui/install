@@ -3,6 +3,13 @@ gui
 ```
 pacman -S cinnamon
 ```
+OR
+---
+```
+pacman -S awesome xlockmore archlinux-xdg-menu
+```
+```xlockmore``` ==> run xlock to lock the screen
+```archlinux-xdg-menu``` ==> setup a generic menu
 
 set auto-start
 --------------
@@ -12,13 +19,21 @@ echo \#exec cinnamon-session-cinnamon2d > ~/.xinitrc
 # With graphic engine
 echo exec cinnamon-session >> ~/.xinitrc
 ```
+OR
+```
+# when no graphic engine
+echo \#exec awesome > ~/.xinitrc
+```
 
 other gui tools
 ---------------
 ```
 # for open archive in gui
 pacman -S cfile-roller
+# file explorer
+pacman -S thunar
 ```
+
 
 Check the Cart graphic corectly install
 ---------------------------------------
@@ -45,4 +60,44 @@ Start automaticly the X when first log
 # force lang of output in english ==> better for developpement
 LANG=en_US.UTF-8
 ```
+
+Configure awesome:
+------------------
+
+base:
+```
+mkdir ~/.config/awesome
+cp /etc/xdg/awesome/rc.lua ~/.config/awesome/
+```
+
+Create the menu:
+```
+xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
+```
+
+And Add in rc.lua:
+```
+xdg_menu = require("archmenu")
+
+mymainmenu = awful.menu({ items = { { "awesome",      myawesomemenu, beautiful.awesome_icon },
+                                    { "Applications", xdgmenu },
+                                    { "Terminator",   "terminator",  "/usr/share/icons/hicolor/16x16/apps/terminator.png" },
+                                    { "Opera",        "opera",       "/usr/share/icons/hicolor/16x16/apps/opera.png" },
+                                    { "Chromium",     "chromium",    "/usr/share/icons/hicolor/16x16/apps/chromium.png" },
+                                    { "Thunar",       "thunar" },
+                                    { "Edn",          "edn",         "/home/edupin/.local/application/edn.app/share/edn/icon.png"},
+                                    { "X-lock",       "xlock"}
+                                  }
+                        })
+```
+
+Add a shortcut to lock screen
+```
+
+```
+
+
+
+
+
 
