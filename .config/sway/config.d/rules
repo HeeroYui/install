@@ -1,0 +1,5 @@
+for_window [id="nautilus"] border pixel
+for_window [id="gnome-calculator"] floating enable; border pixel
+for_window [class="chromium"] border none
+for_window [title="Soundnode"] border none
+for_window [title=".*QEMU.*"] border none; fullscreen enable
