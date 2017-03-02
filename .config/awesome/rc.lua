@@ -189,7 +189,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5"}, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -241,7 +241,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "z",
+    awful.key({ modkey,           }, "Pause",
         function ()
             awful.util.spawn("xlock")
         end,
@@ -259,7 +259,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Right",
         function ()
             -- TODO : Do the last ID better ...
-            if awful.tag.selected().name ~= "5" then
+            if awful.tag.selected().name ~= "12" then
                 awful.tag.viewnext()
             end
         end,
@@ -399,10 +399,10 @@ clientkeys = awful.util.table.join(
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 9 do
+for i = 1, 12 do
     globalkeys = awful.util.table.join(globalkeys,
         -- View tag only.
-        awful.key({ modkey }, "#" .. i + 9,
+        awful.key({ modkey }, "F" .. i,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -410,9 +410,9 @@ for i = 1, 9 do
                            tag:view_only()
                         end
                   end,
-                  {description = "view tag #"..i, group = "tag"}),
+                  {description = "view tag F"..i, group = "tag"}),
         -- Toggle tag display.
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ modkey, "Control" }, "F" .. i,
                   function ()
                       local screen = awful.screen.focused()
                       local tag = screen.tags[i]
@@ -420,9 +420,9 @@ for i = 1, 9 do
                          awful.tag.viewtoggle(tag)
                       end
                   end,
-                  {description = "toggle tag #" .. i, group = "tag"}),
+                  {description = "toggle tag F" .. i, group = "tag"}),
         -- Move client to tag.
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Shift" }, "F" .. i,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -431,9 +431,9 @@ for i = 1, 9 do
                           end
                      end
                   end,
-                  {description = "move focused client to tag #"..i, group = "tag"}),
+                  {description = "move focused client to tag F"..i, group = "tag"}),
         -- Toggle tag on focused client.
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Control", "Shift" }, "F" .. i,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -442,7 +442,7 @@ for i = 1, 9 do
                           end
                       end
                   end,
-                  {description = "toggle focused client on tag #" .. i, group = "tag"})
+                  {description = "toggle focused client on tag F" .. i, group = "tag"})
     )
 end
 
