@@ -20,22 +20,23 @@ Prepare the storage devices
 ---------------------------
 ```
 fdisk /dev/sda
-```
+# help:
 d ==> delete
 p ==> print table
 n ==> new (+128M to define 128 MO)
 a ==> set partition bootable (for sda1)
+```
 
 | Name | Boot  | Size   | Format     | Mount |
 | ---- | :---: | -----: | :--------: | ----- |
-| sda1 | *     | 128M   | mkfs.ext2  | /boot |
+| sda1 | *     | 128M   | mkfs.fat   | /boot |
 | sda2 |       | 8G     | mkswap     |       |
 | sda3 |       | 32G    | mkfs.ext4  | /     |
 | sda4 |       | ALL    | mkfs.ext4  | /home |
 
 mkfs all...  
 ```
-mkfs.ext4 /dev/sda1
+mkfs.fat /dev/sda1
 mkswap /dev/sda2
 mkfs.ext4 /dev/sda3
 mkfs.ext4 /dev/sda4
@@ -90,6 +91,12 @@ install all package you want
 User Configuration
 ==================
 
+Change Root pasword
+-------------------
+```
+passwd
+```
+
 Adding User
 -----------
 ```
@@ -98,6 +105,10 @@ useradd -g users -m -s /bin/bash <username>
 Adding user to a group:  
 ```
 usermod -a -G <wheel,audio,video,disk,storage> <username>  
+```
+Change pasword:
+```
+passwd <username>
 ```
 
 Misc
@@ -127,3 +138,5 @@ Edit /etc/systemd/logind.conf and enable:
 ```
 LidSwitchIgnoreInhibited=yes
 ```
+
+Restart computer....
