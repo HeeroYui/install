@@ -30,18 +30,18 @@ cd openRexBsp
 ------------------
 
 ```
-git clone -b krogoth git://git.yoctoproject.org/poky.git sources/poky
+git clone -b master git://git.yoctoproject.org/poky.git sources/poky --depth=30
 ```
 
 3) Clone of meta de freescale:
 ---------------------------------
 
 ```
-git clone https://git.yoctoproject.org/git/meta-freescale sources/meta-freescale
-git clone https://github.com/Freescale/fsl-community-bsp-base sources/base
-git clone https://github.com/Freescale/meta-freescale-3rdparty sources/meta-freescale-3rdparty
-git clone https://github.com/Freescale/meta-freescale-distro sources/meta-freescale-distro
-git clone https://github.com/Freescale/Documentation sources/Documentation
+git clone -b master https://git.yoctoproject.org/git/meta-freescale sources/meta-freescale --depth=100
+git clone -b master https://github.com/Freescale/fsl-community-bsp-base sources/base --depth=100
+git clone -b master https://github.com/Freescale/meta-freescale-3rdparty sources/meta-freescale-3rdparty --depth=100
+git clone -b master https://github.com/Freescale/meta-freescale-distro sources/meta-freescale-distro --depth=100
+git clone -b master https://github.com/Freescale/Documentation sources/Documentation --depth=100
 ln -s sources/base/README readme.md
 ln -s sources/base/setup-environment setup-environment
 
@@ -51,7 +51,7 @@ ln -s sources/base/setup-environment setup-environment
 -------------------------------
 
 ```
-git clone -b krogoth https://github.com/openembedded/meta-openembedded.git sources/meta-openembedded
+git clone -b master https://github.com/openembedded/meta-openembedded.git sources/meta-openembedded --depth=100
 ```
 
 5) Force python 2.7:
