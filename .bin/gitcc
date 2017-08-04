@@ -17,7 +17,7 @@ seconde=`expr $RANDOM % 59`
 LOCALTIME="$CURRENT_DATE T$nombreHeure:$minute:$seconde"
 
 echo Set the commit TIME : \"$LOCALTIME\"
-echo "export GIT_COMMITTER_DATE=\"$LOCALTIME\" ; git commit -a --date \"$LOCALTIME\" -m \"$*\""
+echo "export GIT_COMMITTER_DATE=\"$LOCALTIME\" ; git -c \"user.name=Edouard DUPIN\" -c \"user.email=yui.heero@gmail.com\" commit -a --date \"$LOCALTIME\" -m \"$*\""
 
 #plop=`GIT_COMMITTER_DATE=\"$LOCALTIME\" ; git commit -a --date \"$LOCALTIME\" -m \"$*\"`
 
