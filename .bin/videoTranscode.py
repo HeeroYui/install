@@ -163,7 +163,8 @@ def trancode_local(list_of_file=[], extention="ts", total_count_of_file=0, offse
 		print("    ========================================================================================")
 		cmd_line = "ffmpeg -i "
 		cmd_line += elem.replace(" ", "\ ").replace("'", "\\'")
-		cmd_line += " -threads 4 -vcodec libx264 -crf 22 -force_key_frames expr:gte\(t,n_forced*1\) -acodec mp2 -ac 2 -ab 192k -ar 48000 -async 1 -deinterlace tmp_transcoded.mkv"
+		#cmd_line += " -threads 4 -vcodec libx264 -crf 22 -force_key_frames expr:gte\(t,n_forced*1\) -acodec mp2 -ac 2 -ab 192k -ar 48000 -async 1 -deinterlace tmp_transcoded.mkv"
+		cmd_line += " -threads 4 -vcodec copy -acodec mp2 -ac 2 -ab 192k -ar 48000 -async 1 -deinterlace tmp_transcoded.mkv"
 		ret = run_command(cmd_line)
 		print(" ret value = " + str(ret))
 		if ret == False:

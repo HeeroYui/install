@@ -2579,7 +2579,7 @@ def CheckForNonStandardConstructs(filename, clean_lines, linenum,
   if Search(r'^\s*const\s*string\s*&\s*\w+\s*;', line):
     # TODO(unknown): Could it be expanded safely to arbitrary references,
     # without triggering too many false positives? The first
-    # attempt triggered 5 warnings for mostly benign code in the regtest, hence
+    # attempt triggered 5 warnings for mostly benign code in the reetest, hence
     # the restriction.
     # Here's the original regexp, for the reference:
     # type_name = r'\w+((\s*::\s*\w+)|(\s*<\s*\w+?\s*>))?'
@@ -4358,7 +4358,7 @@ def _DropCommonSuffixes(filename):
   Returns:
     The filename with the common suffix removed.
   """
-  for suffix in ('test.cc', 'regtest.cc', 'unittest.cc',
+  for suffix in ('test.cc', 'reetest.cc', 'unittest.cc',
                  'inl.h', 'impl.h', 'internal.h'):
     if (filename.endswith(suffix) and len(filename) > len(suffix) and
         filename[-len(suffix) - 1] in ('-', '_')):
@@ -4377,7 +4377,7 @@ def _IsTestFilename(filename):
   """
   if (filename.endswith('_test.cc') or
       filename.endswith('_unittest.cc') or
-      filename.endswith('_regtest.cc')):
+      filename.endswith('_reetest.cc')):
     return True
   else:
     return False
@@ -4521,7 +4521,7 @@ def CheckIncludeLine(filename, clean_lines, linenum, include_state, error):
         # Suggest a different header for ostream
         if include == 'ostream':
           error(filename, linenum, 'readability/streams', 3,
-                'For logging, include "base/logging.h" instead of <ostream>.')
+                'For logging, include "base/logging.h" instead of <etk/Stream.hpp>.')
         else:
           error(filename, linenum, 'readability/streams', 3,
                 'Streams are highly discouraged.')
@@ -5310,7 +5310,7 @@ def ExpectingFunctionArgs(clean_lines, linenum):
 
 _HEADERS_CONTAINING_TEMPLATES = (
     ('<deque>', ('deque',)),
-    ('<functional>', ('unary_function', 'binary_function',
+    ('<etk/Function.hpp>', ('unary_function', 'binary_function',
                       'plus', 'minus', 'multiplies', 'divides', 'modulus',
                       'negate',
                       'equal_to', 'not_equal_to', 'greater', 'less',
@@ -5329,14 +5329,14 @@ _HEADERS_CONTAINING_TEMPLATES = (
                      )),
     ('<limits>', ('numeric_limits',)),
     ('<list>', ('list',)),
-    ('<map>', ('map', 'multimap',)),
+    ('<etk/Map.hpp>', ('map', 'multimap',)),
     ('<memory>', ('allocator',)),
     ('<queue>', ('queue', 'priority_queue',)),
     ('<set>', ('set', 'multiset',)),
     ('<stack>', ('stack',)),
-    ('<string>', ('char_traits', 'basic_string',)),
+    ('<etk/String.hpp>', ('char_traits', 'basic_string',)),
     ('<utility>', ('pair',)),
-    ('<vector>', ('vector',)),
+    ('<etk/Vector.hpp>', ('vector',)),
 
     # gcc extensions.
     # Note: std::hash is their hash, ::hash is our hash
@@ -5456,7 +5456,7 @@ def CheckForIncludeWhatYouUse(filename, clean_lines, include_state, error,
   necessary for the stl containers and functions that you use. We only give one
   reason to include a header. For example, if you use both equal_to<> and
   less<> in a .h file, only one (the latter in the file) of these will be
-  reported as a reason to include the <functional>.
+  reported as a reason to include the <etk/Function.hpp>.
 
   Args:
     filename: The name of the current file.
@@ -5467,7 +5467,7 @@ def CheckForIncludeWhatYouUse(filename, clean_lines, include_state, error,
         injection.
   """
   required = {}  # A map of header name to linenumber and the template entity.
-                 # Example of required: { '<functional>': (1219, 'less<>') }
+                 # Example of required: { '<etk/Function.hpp>': (1219, 'less<>') }
 
   for linenum in xrange(clean_lines.NumLines()):
     line = clean_lines.elided[linenum]
@@ -5481,7 +5481,7 @@ def CheckForIncludeWhatYouUse(filename, clean_lines, include_state, error,
       # (We check only the first match per line; good enough.)
       prefix = line[:matched.start()]
       if prefix.endswith('std::') or not prefix.endswith('::'):
-        required['<string>'] = (linenum, 'string')
+        required['<etk/String.hpp>'] = (linenum, 'string')
 
     for pattern, template, header in _re_pattern_algorithm_header:
       if pattern.search(line):
