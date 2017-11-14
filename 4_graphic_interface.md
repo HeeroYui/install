@@ -35,7 +35,7 @@ pacman -S thunar
 ```
 
 
-Check the Cart graphic corectly install
+Check the Card graphic corectly install
 ---------------------------------------
 ```
 # list the output card : (permit to know wich graphic ard we have)
