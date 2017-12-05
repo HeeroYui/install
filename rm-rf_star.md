@@ -24,3 +24,4 @@ mkdir your_folder
 ext4magic /dev/nvme0n1p5 -j /tmp/JOURNAL.copy -a `date -d "-3day" +%s` -M -d your_folder/
 ```
 
+tools: ```http://ext4magic.sourceforge.net/howto_en.html```
