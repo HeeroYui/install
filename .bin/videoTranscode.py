@@ -84,6 +84,7 @@ list_files_flv = get_list_of_file_in_path('.', "*.flv")
 list_files_mp4 = get_list_of_file_in_path('.', "*.mp4")
 list_files_avi = get_list_of_file_in_path('.', "*.avi")
 list_files_mkv = get_list_of_file_in_path('.', "*.mkv")
+list_files_wmv = get_list_of_file_in_path('.', "*.wmv")
 
 # remove all encoded element in the other files (TS)
 for elem_mkv in list_files_mkv:
@@ -134,6 +135,17 @@ for elem_mkv in list_files_mkv:
 		del list_files_avi[index]
 
 
+# remove all encoded element in the other files (TS)
+for elem_mkv in list_files_mkv:
+	index = 0
+	for elem_wmv in list_files_wmv:
+		if elem_mkv[:-3]+"wmv" == elem_wmv:
+			break;
+		index += 1
+	if index != len(list_files_wmv):
+		print("[INFO] remove from list '" + list_files_wmv[index] + "' ==> already transcoded")
+		del list_files_wmv[index]
+
 print("list of elements TS : ")
 for elem in list_files_ts:
 	print("    - '" + elem + "'")
@@ -145,6 +157,9 @@ for elem in list_files_flv:
 	print("    - '" + elem + "'")
 print("list of elements AVI : ")
 for elem in list_files_avi:
+	print("    - '" + elem + "'")
+print("list of elements WMV : ")
+for elem in list_files_wmv:
 	print("    - '" + elem + "'")
 print("list of elements MKV : ")
 for elem in list_files_mkv:
@@ -173,13 +188,17 @@ def trancode_local(list_of_file=[], extention="ts", total_count_of_file=0, offse
 		print("    move in: '" + elem[:-len(extention)] + "mkv'")
 		cmd_line = "mv tmp_transcoded.mkv " + elem.replace(" ", "\ ").replace("'", "\\'")[:-len(extention)] + "mkv"
 		ret = run_command(cmd_line)
+		cmd_line = "mv " + elem.replace(" ", "\ ").replace("'", "\\'") + " last_transcoded.ts"
+		ret = run_command(cmd_line)
 	
 
 offset = 0;
-trancode_local(list_files_ts  , "ts",  len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi), offset)
+trancode_local(list_files_ts  , "ts",  len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi) + len(list_files_wmv), offset)
 offset += len(list_files_ts);
-trancode_local(list_files_mp4 , "mp4", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi), offset)
+trancode_local(list_files_mp4 , "mp4", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi) + len(list_files_wmv), offset)
 offset += len(list_files_mp4);
-trancode_local(list_files_flv , "flv", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi), offset)
+trancode_local(list_files_flv , "flv", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi) + len(list_files_wmv), offset)
 offset += len(list_files_flv);
-trancode_local(list_files_avi , "avi", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi), offset)
+trancode_local(list_files_avi , "avi", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi) + len(list_files_wmv), offset)
+offset += len(list_files_avi);
+trancode_local(list_files_wmv , "wmv", len(list_files_ts) + len(list_files_mp4) + len(list_files_flv) + len(list_files_avi) + len(list_files_wmv), offset)
