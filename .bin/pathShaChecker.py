@@ -27,6 +27,20 @@ import copy
 
 import hashlib
 
+# get the size of the console:
+def get_console_size():
+	rows, columns = os.popen('stty size', 'r').read().split()
+	return {
+		'x': int(columns),
+		'y': int(rows)
+	}
+
+CONSOLE_SIZE = get_console_size()
+print("lkqjsdmlkqjsdmflkjqsmdlkfjmqslkdjfmlqksjdfmlkqsjdmfmlkqjsdmlkfjqsmlkdfjqmlskdjfmlqksjdfmlkqjsdmf", end="")
+def clear_line():
+	print("\r" + " "*CONSOLE_SIZE["x"] + "\r", end="")
+
+print("Console size = " + str(CONSOLE_SIZE))
 
 def get_sha512(filename, reduce=True):
 	BLOCKSIZE = 16000
@@ -63,9 +77,9 @@ def get_list_of_file_in_path(path, filter="*", recursive = False, remove_path=""
 		      and (    deltaRoot[0] == '/' \
 		            or deltaRoot[0] == '\\' ):
 			deltaRoot = deltaRoot[1:]
-		print("\r" + " " * (last_x+12), end="")
+		clear_line()
 		last_x = len(str(deltaRoot))
-		print("\r[I] path: '" + str(deltaRoot) + "'", end="")
+		print("[I] path: '" + str(deltaRoot) + "'", end="")
 		#ilter some stupid path ... thumbnails=>perso @eaDir synology
 		if    ".thumbnails" in deltaRoot \
 		   or "@eaDir" in deltaRoot:
@@ -165,7 +179,8 @@ for elem in list_files_ref:
 	value_progress = float(iii) / float(len(list_files_ref))
 	value_progress1 = int(value_progress*100)
 	value_progress2 = int(value_progress*10000 - value_progress1*100)
-	print("\r[I] processing " + str(iii) + "/" + str(len(list_files_ref)) + "        " + str(value_progress1) + "." + str(value_progress2) + "/100        " + check_file(elem) + " "*(last_x-len(elem)), end='')
+	clear_line()
+	print("[I] processing " + str(iii) + "/" + str(len(list_files_ref)) + "        " + str(value_progress1) + "." + str(value_progress2) + "/100        " + check_file(elem), end='')
 	last_x = len(elem)
 	sys.stdout.flush()
 	value_sha512 = get_sha512(elem)
@@ -193,7 +208,7 @@ for elem in list_files_ref:
 					print("    ref(copy)=" + check_file(elem))
 					file_in_double.write(check_file(elem_previous["file"]) + "\n")
 					file_in_double.write(check_file(elem) + "\n")
-					file_in_double.write(str("--------------------------------------------------------------------\n"))
+					file_in_double.write("--------------------------------------------------------------------\n")
 					find_double = True
 				break
 		if find_double == True:
@@ -219,13 +234,14 @@ last_x = 0
 iii = 0
 for elem in list_files_src:
 	iii += 1
-	value_progress = float(iii) / float(len(list_files_ref))
+	value_progress = float(iii) / float(len(list_files_src))
 	value_progress1 = int(value_progress*100)
 	value_progress2 = int(value_progress*10000 - value_progress1*100)
-	print("\r[I] processing " + str(iii) + "/" + str(len(list_files_ref)) + "        " + str(value_progress1) + "." + str(value_progress2) + "/100        " + check_file(elem) + " "*(last_x-len(elem)), end='')
+	clear_line()
+	print("[I] processing " + str(iii) + "/" + str(len(list_files_ref)) + "        " + str(value_progress1) + "." + str(value_progress2) + "/100        " + check_file(elem), end='')
 	last_x = len(elem)
 	sys.stdout.flush()
-	value_sha512 = get_sha512(elem)
+	value_sha512 = get_sha512(elem, reduce=True)
 	# check if the element is not a duplication ...
 	if value_sha512 not in curent_DB.keys():
 		src_missing += 1
@@ -234,7 +250,7 @@ for elem in list_files_src:
 		print("    src=" + check_file(elem))
 		file_not_in_ref.write(str(elem + "\n"))
 	else:
-		value_src_sha512_full = get_sha512(elem,reduce=False)
+		value_src_sha512_full = get_sha512(elem, reduce=False)
 		for elem_previous in curent_DB[value_sha512]:
 			if "sha512" not in elem_previous:
 				elem_previous["sha512"] = get_sha512(elem_previous["file"],reduce=False)

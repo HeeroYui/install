@@ -93,6 +93,28 @@ def create_directory_of_file(file):
 	except:
 		os.makedirs(path)
 
+# get the size of the console:
+def get_console_size():
+	rows, columns = os.popen('stty size', 'r').read().split()
+	return {
+		'x': int(columns),
+		'y': int(rows)
+	}
+
+CONSOLE_SIZE = get_console_size()
+def clear_line():
+	print("\r" + " "*CONSOLE_SIZE["x"] + "\r", end="")
+
+def print_mangle(data):
+	out = ""
+	for elem in data:
+		try:
+			if elem in "AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn1234567890)_-()éèà@ù!/:.;,?*µ%$£}{[]><":
+				out += elem
+		except:
+			pass
+	return out
+	
 ##
 ## @brief Get list of all Files in a specific path (with a regex)
 ## @param[in] path (string) Full path of the machine to search files (start with / or x:)
@@ -101,8 +123,7 @@ def create_directory_of_file(file):
 ## @param[in] remove_path (string) Data to remove in the path
 ## @return (list) return files requested
 ##
-## get_list_of_file_in_path
-def scanDirectory(path, filter="*", recursive = False, remove_path=""):
+def get_list_of_file_in_path(path, filter="*", recursive = False, remove_path=""):
 	print(" ******** " + path)
 	out = []
 	if os.path.isdir(os.path.realpath(path)):
@@ -110,15 +131,14 @@ def scanDirectory(path, filter="*", recursive = False, remove_path=""):
 	else:
 		print("[E] path does not exist : '" + str(path) + "'")
 	last_x = 0
-	for root, dirnames, filenames in os.walk(tmp_path):
+	for root, dirnames, file_names in os.walk(tmp_path):
 		deltaRoot = root[len(tmp_path):]
 		while     len(deltaRoot) > 0 \
 		      and (    deltaRoot[0] == '/' \
 		            or deltaRoot[0] == '\\' ):
 			deltaRoot = deltaRoot[1:]
-		print("\r" + " " * (last_x+12), end="")
-		last_x = len(str(deltaRoot))
-		print("\r[I] path: '" + str(deltaRoot) + "'", end="")
+		clear_line()
+		print("[I] path: '" + print_mangle(str(deltaRoot)) + "'", end="")
 		#ilter some stupid path ... thumbnails=>perso @eaDir synology
 		if    ".thumbnails" in deltaRoot \
 		   or "@eaDir" in deltaRoot:
@@ -128,12 +148,12 @@ def scanDirectory(path, filter="*", recursive = False, remove_path=""):
 			return out
 		tmpList = []
 		for elem in filter:
-			tmpppp = fnmatch.filter(filenames, elem)
+			tmpppp = fnmatch.filter(file_names, elem)
 			for elemmm in tmpppp:
 				tmpList.append(elemmm)
 		# Import the module :
 		for cycleFile in tmpList:
-			#for cycleFile in filenames:
+			#for cycleFile in file_names:
 			add_file = os.path.join(tmp_path, deltaRoot, cycleFile)
 			if len(remove_path) != 0:
 				if add_file[:len(remove_path)] != remove_path:
@@ -150,12 +170,19 @@ class AudioFile:
 	"""
 	A generic audio file 
 	"""
-	def __init__(self, fileName):
-		self.fileName = fileName
-		self.fileExt = os.path.splitext(fileName)[1].lower()
-		self.filePath = os.path.split(fileName)[0] + os.path.sep
-		self.data = getattr(self, "parse_%s" % self.fileExt[1:])()
+	def __init__(self, file_name):
+		self.file_name = file_name
+		self.move_folder = ""
+		self.file_ext = os.path.splitext(file_name)[1].lower()
+		self.file_path = os.path.split(file_name)[0] + os.path.sep
+		try:
+			self.data = getattr(self, "parse_%s" % self.file_ext[1:])()
+		except:
+			self.data = None
+			self.move_folder = "zzz_error/"
 		# call the appropriate method based on the file type
+		if self.data == None:
+			return
 		self.generate()
 
 	def generate(self):
@@ -167,57 +194,67 @@ class AudioFile:
 		self.title = lookup("title", "No Title")
 		self.track = lookup("tracknumber", "0")
 		if self.track != "0":
-			self.track = self.track.split("/")[0].lstrip("0") 
+			self.track = self.track.split("/")[0].lstrip("0")
 		# In regards to track numbers, self.data["tracknumber"] returns numbers 
 		# in several different formats: 1, 1/10, 01, or 01/10. Wanting a 
 		# consistent format, the returned string is split at the "/" and leading
 		# zeros are stripped.
-		if int(self.track) < 10:
-			self.track = "0" + self.track
-
+		try:
+			if int(self.track) < 10:
+				self.track = "0" + self.track
+		except:
+			pass
+	
 	def parse_mp3(self):
-		return mutagen.easyid3.EasyID3(self.fileName)
+		data = mutagen.easyid3.EasyID3(self.file_name)
+		return data
 
 	def parse_ogg(self):
-		return mutagen.oggvorbis.Open(self.fileName)
+		return mutagen.oggvorbis.Open(self.file_name)
 
-	def rename(self, newFileName, flatten=False):
-		def uniqueName(newFileName, count=0):
+	def rename(self, newfile_name, flatten=False):
+		def unique_name(newfile_name, count=0):
 			"""
 			Returns a unique name if a file already exists with the supplied 
 			name
 			"""
 			c = "_(%s)" % str(count) if count else ""
-			prefix = directory + os.path.sep if flatten else self.filePath
-			testFileName = prefix + newFileName + c + self.fileExt
-			if os.path.isfile(testFileName):
+			prefix = directory + os.path.sep if flatten else self.file_path
+			testfile_name = prefix + newfile_name + c + self.file_ext
+			if os.path.isfile(testfile_name):
 				count += 1
-				return uniqueName(newFileName, count)
+				return unique_name(newfile_name, count)
 			else:
-				return testFileName
-		new_name = uniqueName(newFileName)
+				return testfile_name
+		if self.file_name == newfile_name:
+			return
+		new_name = unique_name(newfile_name)
 		create_directory_of_file(new_name)
-		os.renames(self.fileName, new_name)
+		os.renames(self.file_name, new_name)
 		# Note: this function is quite simple at the moment; it does not support
 		# multiple file extensions, such as "sample.txt.backup", which would 
 		# only retain the ".backup" file extension.
 
-	def cleanFileName(self, format):
+	def clean_file_name(self, format):
 		"""
 		Generate a clean file name based on metadata
 		"""
-		rawFileName = format % {"artist": self.artist,
+		if self.data == None:
+			return self.move_folder + self.file_name
+		rawfile_name = format % {"artist": self.artist,
 								"album": self.album,
 								"title": self.title,
 								"track": self.track}
-		rawFileName.encode("ascii", "replace")
+		rawfile_name.encode("ascii", "replace")
 		# encode is used to override the default encode error-handing mode;
 		# which is to raise a UnicodeDecodeError
-		cleanFileName = re.sub(restrictedCharPattern, "+", rawFileName)
-		# remove restricted filename characters (\, /, :, *, ?, ", <, >, |) from
+		clean_file_name = re.sub(restrictedCharPattern, "+", rawfile_name)
+		# remove restricted file_name characters (\, :, *, ?, ", <, >, |) from
 		# the supplied string
+		if self.move_folder != "":
+			clean_file_name = self.move_folder + self.move_folder
 
-		return cleanFileName.replace("(=)", os.path.sep)
+		return (self.file_name, clean_file_name.replace("(=)", os.path.sep))
 
 ### Main ###
 
@@ -231,7 +268,7 @@ def main(argv):
  
 	def verifyFormat(format):
 		"""
-		Verify the supplied filename format
+		Verify the supplied file_name format
 		"""	
 		if re.search(restrictedCharPattern, format):
 			raise(FormatError, "supplied format contains restricted characters")
@@ -318,16 +355,18 @@ def safety(message):
 		print("\n***Attention: aborting***")
 		sys.exit()
 
+
+
 def work(directory, format, flatten, recursive, test):
-	#fileList = scanDirectory(directory, [".mp3", ".ogg"], recursive)
-	fileList = scanDirectory(directory, ["*.mp3"], recursive=recursive)
+	#fileList = get_list_of_file_in_path(directory, [".mp3", ".ogg"], recursive)
+	fileList = get_list_of_file_in_path(directory, ["*.*"], recursive=recursive)
 	try:
 		if test:
 			safety("testing mode; nothing will be renamed")
 			print("\n***Attention: starting***")
 			for f in fileList:
 				current = AudioFile(f)
-				print(current.cleanFileName(format))
+				print(current.clean_file_name(format))
 				
 		else:
 			count = 0
@@ -338,12 +377,16 @@ def work(directory, format, flatten, recursive, test):
 			for file in fileList:
 				count += 1
 				current = AudioFile(file)
-				current.rename(current.cleanFileName(format), flatten)
-				print("Renamed %d of %d : " % (count, total))
+				src_file_name, new_tmp_file_name = current.clean_file_name(format)
+				if src_file_name == new_tmp_file_name:
+					continue
+				current.rename(new_tmp_file_name, flatten)
+				new_tmp_file_name = print_mangle(new_tmp_file_name)
+				print("Renamed %d of %d : %s" % (count, total, new_tmp_file_name))
 			print("\n%d files renamed in %f seconds" % (len(fileList), 
 														time.time() - start))
-	except StandardError:
-		print("\n***Error: %s***" % f)
+	except:
+		print("\n***Error: %s***" % file)
 		raise
 		
 if __name__ == "__main__":
