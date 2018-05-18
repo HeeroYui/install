@@ -36,11 +36,10 @@ def get_console_size():
 	}
 
 CONSOLE_SIZE = get_console_size()
-print("lkqjsdmlkqjsdmflkjqsmdlkfjmqslkdjfmlqksjdfmlkqsjdmfmlkqjsdmlkfjqsmlkdfjqmlskdjfmlqksjdfmlkqjsdmf", end="")
 def clear_line():
 	print("\r" + " "*CONSOLE_SIZE["x"] + "\r", end="")
 
-print("Console size = " + str(CONSOLE_SIZE))
+#print("Console size = " + str(CONSOLE_SIZE))
 
 def get_sha512(filename, reduce=True):
 	BLOCKSIZE = 16000
@@ -53,7 +52,7 @@ def get_sha512(filename, reduce=True):
 			if reduce == True:
 				return hasher.hexdigest()
 			buf = afile.read(BLOCKSIZE)
-	return hasher.hexdigest()
+	return copy.deepcopy(hasher.hexdigest())
 
 
 ##
@@ -192,14 +191,22 @@ for elem in list_files_ref:
 		value_src_sha512_full = get_sha512(elem,reduce=False)
 		# a reduce sha512 can have many distint file depending on it ...
 		for elem_previous in curent_DB[value_sha512]:
-			if "sha512" not in elem_previous:
+			if "sha512" not in elem_previous.keys():
+				#print("calculate previous from : '" + elem_previous["file"] + "'")
 				elem_previous["sha512"] = get_sha512(elem_previous["file"],reduce=False)
-		find_double = False
+		add_in_db = True
 		for elem_previous in curent_DB[value_sha512]:
+			"""
+			print("check: ")
+			print("    " + elem_previous["sha512"])
+			print("    " + value_src_sha512_full)
+			print("    " + value_sha512)
+			"""
 			if elem_previous["sha512"] == value_src_sha512_full:
 				if args.ref_remove_double == True:
 					print("\n    ==> remove double in reference: '" + check_file(elem) + "'")
 					os.remove(elem)
+					add_in_db = False
 				else:
 					ref_duplicate += 1
 					print("\n[ERROR] Double element in the data-base:      " + check_file(ref_duplicate))
@@ -209,10 +216,11 @@ for elem in list_files_ref:
 					file_in_double.write(check_file(elem_previous["file"]) + "\n")
 					file_in_double.write(check_file(elem) + "\n")
 					file_in_double.write("--------------------------------------------------------------------\n")
-					find_double = True
 				break
-		if find_double == True:
+		if add_in_db == True:
+			print("apend new : " + str(len(curent_DB[value_sha512])))
 			curent_DB[value_sha512].append({"file":elem,"sha512":value_src_sha512_full})
+			print("apend new : " + str(len(curent_DB[value_sha512])))
 	else:
 		curent_DB[value_sha512] = [{"file":elem}]
 print("")
@@ -238,38 +246,53 @@ for elem in list_files_src:
 	value_progress1 = int(value_progress*100)
 	value_progress2 = int(value_progress*10000 - value_progress1*100)
 	clear_line()
-	print("[I] processing " + str(iii) + "/" + str(len(list_files_ref)) + "        " + str(value_progress1) + "." + str(value_progress2) + "/100        " + check_file(elem), end='')
+	print("[I] processing " + str(iii) + "/" + str(len(list_files_src)) + "        " + str(value_progress1) + "." + str(value_progress2) + "/100        " + check_file(elem), end='')
 	last_x = len(elem)
 	sys.stdout.flush()
 	value_sha512 = get_sha512(elem, reduce=True)
 	# check if the element is not a duplication ...
 	if value_sha512 not in curent_DB.keys():
 		src_missing += 1
+		"""
 		print("\n[INFO] Find element not in the dB:      " + str(src_missing))
 		print("    sha512=" + str(value_sha512))
 		print("    src=" + check_file(elem))
+		"""
+		print(" (add)")
+		curent_DB[value_sha512] = [{"file":elem}]
 		file_not_in_ref.write(str(elem + "\n"))
 	else:
 		value_src_sha512_full = get_sha512(elem, reduce=False)
 		for elem_previous in curent_DB[value_sha512]:
-			if "sha512" not in elem_previous:
-				elem_previous["sha512"] = get_sha512(elem_previous["file"],reduce=False)
-		find_double = False
+			if "sha512" not in elem_previous.keys():
+				print("calculate previous from : '" + elem_previous["file"] + "'")
+				elem_previous["sha512"] = get_sha512(elem_previous["file"], reduce=False)
+		add_in_db = True
 		for elem_previous in curent_DB[value_sha512]:
+			"""
+			print("check: ")
+			print("    " + elem_previous["sha512"])
+			print("    " + value_src_sha512_full)
+			print("    " + value_sha512)
+			"""
 			if elem_previous["sha512"] == value_src_sha512_full:
-				find_double = True
 				if args.src_remove_double == True:
 					print("\n    ==> remove double in source: '" + check_file(elem) + "'")
 					os.remove(elem)
+					add_in_db = False
 				else:
 					print("\n    ==> must move double in source in destination: '" + check_file(elem) + "'")
 				break
-		if find_double == False:
+		if add_in_db == True:
 			src_missing += 1
+			"""
 			print("\n[INFO] Find element not in the dB (FULL):      " + str(src_missing))
 			print("    sha512=" + str(value_sha512))
 			print("    src=" + check_file(elem))
+			"""
+			print(" (add 2)")
 			file_not_in_ref.write(check_file(elem) + "\n")
+			curent_DB[value_sha512].append({"file":elem,"sha512":value_src_sha512_full})
 print("")
 
 file_not_in_ref.close()

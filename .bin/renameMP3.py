@@ -13,12 +13,8 @@ Options:
   -d ...,   --directory=...             Specify which directory to work in 
                                         (default is the current directory)
   -f ...,   --format=...                Specify the naming format
-  -l,       --flatten                   Move all files into the same root
-                                        directory
   -r,       --recursive                 Work recursively on the specified 
                                         directory
-  -t,       --test                      Only display the new file names; nothing
-                                        will be renamed
   -h,       --help                      Display this help
   
 Formatting:
@@ -35,7 +31,7 @@ Formatting:
   
   The following characters are of special importance to the operating system 
   and cannot be used in the file name:
-  \    :    *    ?    "    <    >    |
+  \  /  :    *    ?    "    <    >    |
 
   (=) is replaced by the directory path separator, so to move files into
   artist and album subdirectories, the following format can be used:
@@ -51,7 +47,7 @@ Examples:
   renameMP3.py -f "title -- artist"  Renames music files in the current
                                      directory with the name format:
                                      Sample Title -- Sample Artist.mp3
-  renameMP3.py -d . -r --flatten
+  renameMP3.py -d . -r
 
 pip install mutagen --user
 pip install easyid3 --user
@@ -70,6 +66,9 @@ import fnmatch
 
 import mutagen.easyid3
 import mutagen.oggvorbis
+
+restrictedCharPattern = re.compile('[\\\:\/\*\?"<>\|]')
+formatPattern = re.compile('artist|album|title|track')
 
 ### Exceptions ###
 class FormatError(Exception):
@@ -164,7 +163,9 @@ def get_list_of_file_in_path(path, filter="*", recursive = False, remove_path=""
 	print(" len out " + str(len(out)))
 	return out;
 
-
+list_of_artist = []
+list_of_album = []
+list_of_title = []
 
 class AudioFile:
 	"""
@@ -204,6 +205,12 @@ class AudioFile:
 				self.track = "0" + self.track
 		except:
 			pass
+		if self.artist == "" or self.artist == "No Artist":
+			self.data = None
+		if self.title == "" or self.title == "No Title":
+			self.data = None
+		if self.album == "" or self.album == "No Album":
+			self.data = None
 	
 	def parse_mp3(self):
 		data = mutagen.easyid3.EasyID3(self.file_name)
@@ -212,21 +219,24 @@ class AudioFile:
 	def parse_ogg(self):
 		return mutagen.oggvorbis.Open(self.file_name)
 
-	def rename(self, newfile_name, flatten=False):
+	def rename(self, newfile_name):
 		def unique_name(newfile_name, count=0):
 			"""
 			Returns a unique name if a file already exists with the supplied 
 			name
 			"""
-			c = "_(%s)" % str(count) if count else ""
-			prefix = directory + os.path.sep if flatten else self.file_path
+			if count == 0:
+				c = ""
+			else:
+				c = "_(%s)" % str(count)
+			prefix = directory + os.path.sep
 			testfile_name = prefix + newfile_name + c + self.file_ext
-			if os.path.isfile(testfile_name):
-				count += 1
-				return unique_name(newfile_name, count)
+			if os.path.isfile(testfile_name) == True:
+				return unique_name(newfile_name, count + 1)
 			else:
 				return testfile_name
 		if self.file_name == newfile_name:
+			print("get same file : " + self.file_name)
 			return
 		new_name = unique_name(newfile_name)
 		create_directory_of_file(new_name)
@@ -240,7 +250,7 @@ class AudioFile:
 		Generate a clean file name based on metadata
 		"""
 		if self.data == None:
-			return self.move_folder + self.file_name
+			return (self.file_name, self.move_folder + self.file_name)
 		rawfile_name = format % {"artist": self.artist,
 								"album": self.album,
 								"title": self.title,
@@ -252,100 +262,11 @@ class AudioFile:
 		# remove restricted file_name characters (\, :, *, ?, ", <, >, |) from
 		# the supplied string
 		if self.move_folder != "":
-			clean_file_name = self.move_folder + self.move_folder
+			clean_file_name = self.move_folder + clean_file_name
+			print("******** move in ZZ " + clean_file_name)
 
 		return (self.file_name, clean_file_name.replace("(=)", os.path.sep))
 
-### Main ###
-
-def main(argv):
-	global directory
-	directory = os.getcwd()
-	format = "%(artist)s/%(album)s/%(track)s-%(title)s"
-	flatten = False
-	recursive = False
-	test = False
- 
-	def verifyFormat(format):
-		"""
-		Verify the supplied file_name format
-		"""	
-		if re.search(restrictedCharPattern, format):
-			raise(FormatError, "supplied format contains restricted characters")
-
-		if not re.search(formatPattern, format):
-			raise(FormatError, "supplied format does not contain any metadata keys")
-			# the supplied format must contain at least one of "artist", 
-			# "album", "title", or "track", or all files will be named 
-			# identically
-		
-		format = format.replace("artist", "%(artist)s")
-		format = format.replace("album", "%(album)s")
-		format = format.replace("title", "%(title)s")
-		format = format.replace("track", "%(track)s")
-		return format
-		
-	def verifyDirectory(directory):
-		"""
-		Verify the supplied directory path
-		"""
-		if os.path.isdir(directory):
-			return os.path.abspath(directory)
-		
-		else:
-			raise(DirectoryError, "supplied directory cannot be found")
-	
-	def usage():
-		print(__doc__)
-	
-	try:
-		opts, args = getopt.getopt(argv, "d:f:hlrt", ["directory=", 
-													  "format=", 
-													  "help", 
-													  "flatten", 
-													  "recursive", 
-													  "test"])
-	except getopt.error:
-		usage()
-		print("\n***Error: %s***" % error)
-		sys.exit(1)
-	except error:
-		usage()
-		print("\n***Error: %s***" % error)
-		sys.exit(1)
-	for opt, arg in opts:
-		if opt in ("-h", "--help"):
-			usage()
-			sys.exit()
-		elif opt in ("-f", "--format"):
-			try:
-				format = verifyFormat(arg)
-			except FormatError:
-				print("\n***Error: %s***" % error)
-				sys.exit(2)
-			except error:
-				print("\n***Error: %s***" % error)
-				sys.exit(2)
-		elif opt in ("-d", "--directory"):
-			"""
-			try:
-				directory = verifyDirectory(arg)
-			
-			except DirectoryError:
-				print("\n***Error: %s***" % error)
-				sys.exit(3)
-			except error:
-				print("\n***Error: %s***" % error)
-				sys.exit(3)
-			"""
-			directory = arg
-		elif opt in ("-l", "--flatten"):
-			flatten = True
-		elif opt in ("-r", "--recursive"):
-			recursive = True
-		elif opt in ("-t", "--test"):
-			test = True
-	work(directory, format, flatten, recursive, test)
 
 def safety(message):
 	print("\n***Attention: %s***" % message)
@@ -357,40 +278,85 @@ def safety(message):
 
 
 
-def work(directory, format, flatten, recursive, test):
+def work(directory, format, recursive):
 	#fileList = get_list_of_file_in_path(directory, [".mp3", ".ogg"], recursive)
 	fileList = get_list_of_file_in_path(directory, ["*.*"], recursive=recursive)
 	try:
-		if test:
-			safety("testing mode; nothing will be renamed")
-			print("\n***Attention: starting***")
-			for f in fileList:
-				current = AudioFile(f)
-				print(current.clean_file_name(format))
-				
-		else:
-			count = 0
-			total = len(fileList)
-			safety("all audio files in %s will be renamed : %d " % (directory, total))
-			print("\n***Attention: starting***")
-			start = time.time()
-			for file in fileList:
-				count += 1
-				current = AudioFile(file)
-				src_file_name, new_tmp_file_name = current.clean_file_name(format)
-				if src_file_name == new_tmp_file_name:
-					continue
-				current.rename(new_tmp_file_name, flatten)
-				new_tmp_file_name = print_mangle(new_tmp_file_name)
-				print("Renamed %d of %d : %s" % (count, total, new_tmp_file_name))
-			print("\n%d files renamed in %f seconds" % (len(fileList), 
-														time.time() - start))
+		count = 0
+		total = len(fileList)
+		safety("all audio files in %s will be renamed : %d " % (directory, total))
+		print("\n***Attention: starting***")
+		start = time.time()
+		for file in fileList:
+			count += 1
+			current = AudioFile(file)
+			src_file_name, new_tmp_file_name = current.clean_file_name(format)
+			#if src_file_name == new_tmp_file_name:
+			#	continue
+			current.rename(new_tmp_file_name)
+			new_tmp_file_name = print_mangle(new_tmp_file_name)
+			print("Renamed %d/%d  %d/100: %s" % (count, total, int((count*100)/total), new_tmp_file_name))
+		print("\n%d files renamed in %f seconds" % (len(fileList), 
+													time.time() - start))
 	except:
 		print("\n***Error: %s***" % file)
 		raise
-		
-if __name__ == "__main__":
-	restrictedCharPattern = re.compile('[\\\:\*\?"<>\|]')
-	formatPattern = re.compile('artist|album|title|track')
 
-	main(sys.argv[1:])
+
+### Main ###
+
+directory = os.getcwd()
+
+import argparse
+
+parser = argparse.ArgumentParser(description='Check comparison between 2 path.')
+parser.add_argument('--format',
+                    type=str,
+                    action='store',
+                    default="%(artist)s(=)%(album)s(=)%(track)s-%(title)s",
+                    help='data formating of the output')
+parser.add_argument('--directory',
+                    type=str,
+                    action='store',
+                    default=directory,
+                    help='Path to ordering all the data')
+parser.add_argument('--recursive',
+                    action='store_true',
+                    default=False,
+                    help='parse recursively all the directory')
+
+args = parser.parse_args()
+
+
+
+def verifyFormat(format):
+	"""
+	Verify the supplied file_name format
+	"""	
+	if re.search(restrictedCharPattern, format):
+		raise(FormatError, "supplied format contains restricted characters")
+
+	if not re.search(formatPattern, format):
+		raise(FormatError, "supplied format does not contain any metadata keys")
+		# the supplied format must contain at least one of "artist", 
+		# "album", "title", or "track", or all files will be named 
+		# identically
+	
+	format = format.replace("artist", "%(artist)s")
+	format = format.replace("album", "%(album)s")
+	format = format.replace("title", "%(title)s")
+	format = format.replace("track", "%(track)s")
+	return format
+
+
+try:
+	format = verifyFormat(args.format)
+except FormatError:
+	print("\n***Error: %s***" % error)
+	sys.exit(2)
+except error:
+	print("\n***Error: %s***" % error)
+	sys.exit(2)
+
+
+work(args.directory, args.format, args.recursive)
