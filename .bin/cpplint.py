@@ -3266,7 +3266,7 @@ def CheckBracesSpacing(filename, clean_lines, linenum, error):
     #   LastArgument(..., type{});
     #   LOG(INFO) << type{} << " ...";
     #   map_of_type[{...}] = ...;
-    #   ternary = expr ? new type{} : nullptr;
+    #   ternary = expr ? new type{} : null;
     #   OuterTemplate<InnerTemplateConstructor<Type>{}>
     #
     # We check for the character following the closing brace, and
@@ -5257,7 +5257,7 @@ def CheckCStyleCast(filename, clean_lines, linenum, cast_type, pattern, error):
     # Don't warn on assignments to function pointers, but keep warnings for
     # unnamed parameters to pure virtual functions.  Note that this pattern
     # will also pass on assignments of "0" to function pointers, but the
-    # preferred values for those would be "nullptr" or "NULL".
+    # preferred values for those would be "null" or "NULL".
     matched_zero = Match(r'^\s=\s*(\S+)\s*;', remainder)
     if matched_zero and matched_zero.group(1) != '0':
       return False
