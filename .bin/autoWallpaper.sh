@@ -3,6 +3,7 @@
 
 export DISPLAY=:0
 feh --randomize --bg-fill /home/edupin/.config/awesome/background/* >> /home/edupin/aaaaaaaa_last_update_wallpaper.txt
+#feh --randomize --bg-fill /home/heero/.config/awesome/background/*
 
 # crontab -e
 # ou edn /var/spool/cron/edupin
