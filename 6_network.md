@@ -28,3 +28,30 @@ systemctl enable avahi-daemon.service
 systemctl start avahi-daemon.service
 ```
 
+
+Corret ontrol of time:
+========================
+
+Install servie of network time protocol:
+
+```
+pacman -S ntp
+```
+
+For ce the time to update fast and not with small change
+
+```
+ntpd -qg
+```
+
+Start a service:
+
+```
+systemctl stop ntpd
+```
+
+Display the current status
+
+```
+timedatectl status
+```

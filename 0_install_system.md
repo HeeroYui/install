@@ -1,5 +1,7 @@
 My install and configuration script for Archlinux.
 
+see: https://www.tecmint.com/arch-linux-installation-and-configuration-guide/
+
 Archlinux Install
 =================
 
@@ -18,25 +20,29 @@ wifi-menu
 
 Prepare the storage devices
 ---------------------------
+
+mettre ma partition en ```GPT```
+
 ```
-fdisk /dev/sda
-# help:
-d ==> delete
-p ==> print table
-n ==> new (+128M to define 128 MO)
-a ==> set partition bootable (for sda1)
+fdisk
+=> m
+```
+
+
+```
+cfdisk /dev/sda
 ```
 
 | Name | Boot  | Size   | Format     | Mount |
 | ---- | :---: | -----: | :--------: | ----- |
-| sda1 | *     | 128M   | mkfs.fat   | /boot |
-| sda2 |       | 8G     | mkswap     |       |
-| sda3 |       | 32G    | mkfs.ext4  | /     |
-| sda4 |       | ALL    | mkfs.ext4  | /home |
+| sda1 | *     | 300M   | mkfs.fat   | /boot | EFI System
+| sda2 |       | 8G     | mkswap     |       | swap
+| sda3 |       | 32G    | mkfs.ext4  | /     | linux filesystem
+| sda4 |       | ALL    | mkfs.ext4  | /home | linux home
 
 mkfs all...  
 ```
-mkfs.fat /dev/sda1
+mkfs.fat -F32 /dev/sda1
 mkswap /dev/sda2
 mkfs.ext4 /dev/sda3
 mkfs.ext4 /dev/sda4
@@ -55,7 +61,7 @@ Install the base system
 -----------------------
 Replace \<foobar\> by what you want...
 ```
-pacstrap /mnt base base-devel syslinux vim git
+pacstrap /mnt base base-devel syslinux vim git gptfdisk
 genfstab -L -p /mnt >> /mnt/etc/fstab  
 arch-chroot /mnt  
 echo <laptop-name> > /etc/hostname  
