@@ -241,7 +241,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "Pause",
+    awful.key({ modkey,           }, "F12",
         function ()
             awful.util.spawn("xlock")
         end,
@@ -259,7 +259,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Right",
         function ()
             -- TODO : Do the last ID better ...
-            if awful.tag.selected().name ~= "12" then
+            if awful.tag.selected().name ~= "11" then
                 awful.tag.viewnext()
             end
         end,
@@ -399,7 +399,7 @@ clientkeys = awful.util.table.join(
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 12 do
+for i = 1, 11 do
     globalkeys = awful.util.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, "F" .. i,
