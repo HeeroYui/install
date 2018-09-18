@@ -108,6 +108,7 @@ export XAUTHORITY=/home/$USER/.Xauthority
 # force lang of output in english ==> better for developpement
 LANG=en_US.UTF-8
 
+export DISPLAY=:0
 
 # prevent the removing by error
 alias rm='echo -e "========================================================\n== You must use trash instead of rm ==> prevent error ==\n========================================================\n"; echo > /dev/null'
