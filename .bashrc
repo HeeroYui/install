@@ -42,8 +42,6 @@ PATH=$PATH:/home/heero/.bin
 PATH=$PATH:/home/heero/.local/bin
 PATH=$PATH:/home/heero/.local/application/
 
-PS1='\[\033[01;32m\][\u]\[\033[00m\]\[\033[01;34m\]\w\[\033[00m\]\$ '
-
 c_red='^[[31m'
 c_green='^[[32m'
 c_sgr0='^[[00m'
@@ -102,12 +100,14 @@ parse_cvs_branch() {
 
 PS1='\033]0;$(workspaceMode.sh \w) \W\007\r\[\033[01;32m\][ \h : \u ]\[\033[01;33m\]$(parse_git_branch)$(parse_svn_branch)$(parse_cvs_branch)\[\033[00m\]\[\033[01;34m\]\w\[\033[00m\]\n\$ '
 
-export UBUNTU_MENUPROXY=0
+#export UBUNTU_MENUPROXY=0
 export XAUTHORITY=/home/heero/.Xauthority
 
-[[ oo $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+#[[ oo $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 
 # force lang of output in english ==> better for developpement
 LANG=en_US.UTF-8
 
 
+# prevent the removing by error
+alias rm='echo -e "========================================================\n== You must use trash instead of rm ==> prevent error ==\n========================================================\n"; echo > /dev/null'
