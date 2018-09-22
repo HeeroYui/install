@@ -105,11 +105,15 @@ xdg_menu = require("archmenu")
 
 mymainmenu = awful.menu({ items = { { "awesome",      myawesomemenu, beautiful.awesome_icon },
                                     { "Applications", xdgmenu },
-                                    { "Terminator",   "terminator",  "/usr/share/icons/hicolor/16x16/apps/terminator.png" },
-                                    { "Opera",        "opera",       "/usr/share/icons/hicolor/16x16/apps/opera.png" },
-                                    { "Chromium",     "chromium",    "/usr/share/icons/hicolor/16x16/apps/chromium.png" },
-                                    { "Thunar",       "thunar" },
-                                    { "Edn",          "edn",         "/home/edupin/.local/application/edn.app/share/edn/icon.png"},
+                                    { "Terminator",   "terminator",          "/usr/share/icons/hicolor/scalable/apps/terminator.svg" },
+                                    { "Firefox",      "firefox",             "/usr/share/icons/hicolor/16x16/apps/firefox.png" },
+                                    { "Chromium",     "chromium",            "/usr/share/icons/hicolor/16x16/apps/chromium.png" },
+                                    { "Filezilla",    "filezilla",           "/usr/share/icons/hicolor/scalable/apps/filezilla.svg" },
+                                    { "Thunar",       "thunar",              "/usr/share/icons/hicolor/scalable/apps/Thunar.svg" },
+                                    { "Edn",          "edn",                 "/home/heero/.local/application/edn.app/share/edn/icon.png"},
+                                    { "Zeus Video",   "zeus-player-video",   "/home/heero/.local/application/zeus-player-video.app/share/zeus-player-video/icon.png"},
+                                    { "Zeus Audio",   "zeus-player-audio",   "/home/heero/.local/application/zeus-player-audio.app/share/zeus-player-audio/icon.png"},
+                                    { "Zeus Picture", "zeus-viewer-picture", "/home/heero/.local/application/zeus-player-audio.app/share/zeus-viewer-picture/icon.png"},
                                     { "X-lock",       "xlock"}
                                   }
                         })
@@ -243,7 +247,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "F12",
+    awful.key({ modkey,           }, "Pause",
         function ()
             awful.util.spawn("xlock")
         end,
@@ -261,7 +265,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Right",
         function ()
             -- TODO : Do the last ID better ...
-            if awful.tag.selected().name ~= "11" then
+            if awful.tag.selected().name ~= "12" then
                 awful.tag.viewnext()
             end
         end,
@@ -401,7 +405,7 @@ clientkeys = awful.util.table.join(
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 11 do
+for i = 1, 12 do
     globalkeys = awful.util.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, "F" .. i,
