@@ -232,6 +232,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
+            require("battery-widget") {},
         },
     }
 end)
@@ -573,6 +574,17 @@ client.connect_signal("request::titlebars", function(c)
         layout = wibox.layout.align.horizontal
     }
 end)
+
+
+----------------------------------------------------
+-- Calendar management
+----------------------------------------------------
+local calendar = require("calendar")
+-- attach it as popup to your text clock widget:
+calendar({}):attach(mytextclock)
+----------------------------------------------------
+
+
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)

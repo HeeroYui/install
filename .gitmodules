@@ -1,0 +1,15 @@
+[submodule ".config/awesome/battery-widget"]
+	path = .config/awesome/battery-widget
+	url = https://github.com/deficient/battery-widget.git
+[submodule ".config/awesome/leds-widget"]
+	path = .config/awesome/leds-widget
+	url = https://github.com/deficient/leds-widget.git
+[submodule ".config/awesome/calendar"]
+	path = .config/awesome/calendar
+	url = https://github.com/deficient/calendar.git
+[submodule ".config/awesome/volume-control"]
+	path = .config/awesome/volume-control
+	url = https://github.com/deficient/volume-control.git
+[submodule ".config/awesome/brightness"]
+	path = .config/awesome/brightness
+	url = https://github.com/deficient/brightness.git
