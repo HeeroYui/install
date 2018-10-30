@@ -31,6 +31,8 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias grep='grep --color'
+
 # some more ls aliases
 alias ll='ls -l --color -h'
 alias la='ls -la --color -h'
