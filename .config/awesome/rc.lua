@@ -114,6 +114,10 @@ mymainmenu = awful.menu({ items = { { "awesome",      myawesomemenu, beautiful.a
                                     { "Zeus Video",   "zeus-player-video",   "/home/heero/.local/application/zeus-player-video.app/share/zeus-player-video/icon.png"},
                                     { "Zeus Audio",   "zeus-player-audio",   "/home/heero/.local/application/zeus-player-audio.app/share/zeus-player-audio/icon.png"},
                                     { "Zeus Picture", "zeus-viewer-picture", "/home/heero/.local/application/zeus-player-audio.app/share/zeus-viewer-picture/icon.png"},
+                                    { "ARandR (multiscreen config)",       "arandr"},
+                                    { "BlueBerry (Bluetooth management)",  "blueberry"},
+                                    { "Record screen",  "simplescreenrecorder"},
+				    { "Draw.io", "chromium --profile-directory=Default --app-id=pebppomjfocnoigkeepgbmcifnnlndla", "/home/heero/.local/share/icons/hicolor/128x128/apps/chrome-pebppomjfocnoigkeepgbmcifnnlndla-Default.png" },
                                     { "X-lock",       "xlock"}
                                   }
                         })
