@@ -14,7 +14,8 @@ listFiles+=" `find . -name "*.mm"` "
 listFiles+=" `find . -name "*.mk"` "
 listFiles+=" `find . -name "*.md"` "
 listFiles+=" `find . -name "*.js"` "
-
+listFiles+=" `find . -name "*.xml"` "
+listFiles+=" `find . -name "*.json"` "
 listFiles+=" `find . -name "*.py"` "
 
 echo "Replace : \"$1\" ==> \"$2\""
