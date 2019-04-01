@@ -134,10 +134,19 @@ def rm_date(data):
 	val = data.split("_France O_")
 	if len(val) == 2:
 		return val[0]
+	val = data.split("_France Ô_")
+	if len(val) == 2:
+		return val[0]
 	val = data.split("_NT1_")
 	if len(val) == 2:
 		return val[0]
 	val = data.split("_TF1_")
+	if len(val) == 2:
+		return val[0]
+	val = data.split("_TF1_")
+	if len(val) == 2:
+		return val[0]
+	val = data.split("_TFX_")
 	if len(val) == 2:
 		return val[0]
 	val = data.split("_TMC_")
@@ -252,6 +261,7 @@ def replace_generic_saison_and_name(data):
 		data = data.replace("S0" + elem + "E97", "- Saison " + elem + " Episode 97 -");
 		data = data.replace("S0" + elem + "E98", "- Saison " + elem + " Episode 98 -");
 		data = data.replace("S0" + elem + "E99", "- Saison " + elem + " Episode 99 -");
+	data = data.replace("sXX-e99", " - ");
 	return data
 
 def rename_group(list_element, extention):
@@ -286,8 +296,8 @@ def rename_group(list_element, extention):
 				cmd_line = "mv " + elem.replace(" ", "\ ").replace("'", "\\'") + " " + out.replace(" ", "\ ").replace("'", "\\'")
 				ret = run_command(cmd_line)
 		elif len(val) == 2:
-			print("        ???")
-			valll = val[0] + " - " + val[1]
+			print("        ?2?")
+			valll = val[0] + "-sXX-eXX-" + val[1]
 			if valll + "." + extention != elem:
 				print("        ==> rename ...")
 				print("            " + elem)
