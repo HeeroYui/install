@@ -55,3 +55,17 @@ Display the current status
 ```
 timedatectl status
 ```
+
+
+tools for connections
+=====================
+
+```
+nmtui
+```
+
+to force start of hidden network:
+```
+nmcli con up NAME_DISPALY_IN_NMTUI
+```
+
