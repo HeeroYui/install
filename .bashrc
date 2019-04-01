@@ -31,6 +31,8 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias grep='grep --color'
+
 # some more ls aliases
 alias ll='ls -l --color -h'
 alias la='ls -la --color -h'
@@ -103,7 +105,11 @@ PS1='\033]0;$(workspaceMode.sh \w) \W\007\r\[\033[01;32m\][ \h : \u ]\[\033[01;3
 #export UBUNTU_MENUPROXY=0
 export XAUTHORITY=/home/$USER/.Xauthority
 
-#[[ oo $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+
+#export GALE_BACKEND="wayland"
+
+#[ [oo $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+
 
 # force lang of output in english ==> better for developpement
 LANG=en_US.UTF-8
