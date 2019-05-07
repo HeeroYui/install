@@ -39,7 +39,6 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
--- beautiful.init("theme/theme.lua")
 beautiful.init("~/.config/awesome/theme/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
@@ -114,11 +113,6 @@ mymainmenu = awful.menu({ items = { { "awesome",      myawesomemenu, beautiful.a
                                     { "Zeus Video",   "zeus-player-video",   "/home/heero/.local/application/zeus-player-video.app/share/zeus-player-video/icon.png"},
                                     { "Zeus Audio",   "zeus-player-audio",   "/home/heero/.local/application/zeus-player-audio.app/share/zeus-player-audio/icon.png"},
                                     { "Zeus Picture", "zeus-viewer-picture", "/home/heero/.local/application/zeus-player-audio.app/share/zeus-viewer-picture/icon.png"},
-                                    { "ARandR (multiscreen config)",       "arandr"},
-                                    { "BlueBerry (Bluetooth management)",  "blueberry"},
-                                    { "Record screen",  "simplescreenrecorder"},
-				    { "Image to poster", "posterazor"},
-				    { "Draw.io", "chromium --profile-directory=Default --app-id=pebppomjfocnoigkeepgbmcifnnlndla", "/home/heero/.local/share/icons/hicolor/128x128/apps/chrome-pebppomjfocnoigkeepgbmcifnnlndla-Default.png" },
                                     { "X-lock",       "xlock"}
                                   }
                         })
@@ -237,7 +231,6 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
-            require("battery-widget") {},
         },
     }
 end)
@@ -579,17 +572,6 @@ client.connect_signal("request::titlebars", function(c)
         layout = wibox.layout.align.horizontal
     }
 end)
-
-
-----------------------------------------------------
--- Calendar management
-----------------------------------------------------
-local calendar = require("calendar")
--- attach it as popup to your text clock widget:
-calendar({}):attach(mytextclock)
-----------------------------------------------------
-
-
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)

@@ -20,6 +20,10 @@ listFiles+=" `find . -name "*.qrc"` "
 listFiles+=" `find . -name "*.xml"` "
 listFiles+=" `find . -name "*.json"` "
 listFiles+=" `find . -name "*.py"` "
+listFiles+=" `find . -name "*.rst"` "
+listFiles+=" `find . -name "*.in"` "
+listFiles+=" `find . -name "*.txt"` "
+listFiles+=" `find . -name "*.cfg"` "
 
 echo "Replace : \"$1\" ==> \"$2\""
 
