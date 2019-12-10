@@ -1,9 +1,19 @@
+Set-up interface GUI
+====================
+
+
 Set first the Xautority:
 
 ```
 touch ~/.Xauthority
 ```
 
+```
+pacman -S mesa
+pacman -S xf86-video-intel
+pacman -S bumblebee
+pacman -S xf86-video-nouveau
+```
 
 gui
 ---
@@ -29,7 +39,7 @@ echo exec cinnamon-session >> ~/.xinitrc
 OR
 ```
 # when no graphic engine
-echo \#exec awesome > ~/.xinitrc
+echo awesome > ~/.xinitrc
 ```
 
 other gui tools

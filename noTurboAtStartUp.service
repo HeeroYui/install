@@ -1,5 +1,7 @@
 # cp noTurboAtStartUp.sh /usr/bin
-# cp noTurboAtStartUp.service /lib/systemd/system/
+# cp noTurboAtStartUp.service /usr/lib/systemd/system/
+# systemctl start noTurboAtStartUp
+# systemctl enable noTurboAtStartUp
 [Unit]
 Description=Disable turbo capability when system start
 After=network.target remote-fs.target nss-lookup.target

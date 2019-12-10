@@ -51,43 +51,64 @@ mkfs.ext4 /dev/sda4
 
 mount all...  
 ```
-mount /dev/sda3 /mnt  
-mkdir /mnt/{boot,home}  
-mount /dev/sda1 /mnt/boot  
-mount /dev/sda4 /mnt/home  
-swapon /dev/sda2  
+mount /dev/sda3 /mnt
+mkdir /mnt/home
+mount /dev/sda4 /mnt/home
+swapon /dev/sda2
 ```
 Install the base system
 -----------------------
 Replace \<foobar\> by what you want...
 ```
-pacstrap /mnt base base-devel syslinux vim git gptfdisk
-genfstab -L -p /mnt >> /mnt/etc/fstab  
-arch-chroot /mnt  
-echo <laptop-name> > /etc/hostname  
-ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime  
-vim /etc/locale.gen (en_us, fr, ja & utf-8)  
-locale-gen  
-echo "LANG=\"en_US.UTF-8\"" > /etc/locale.conf  
-echo "KEYMAP=<fr-latin9/jp106>" > /etc/vconsole.conf  
+pacstrap /mnt base base-devel vim git gptfdisk
+arch-chroot /mnt
+echo <laptop-name> > /etc/hostname
+ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
+vim /etc/locale.gen (en_us, fr, ja & utf-8)
+locale-gen
+echo "LANG=\"en_US.UTF-8\"" > /etc/locale.conf
+echo "KEYMAP=<fr-latin9/jp106>" > /etc/vconsole.conf
 
-mkinitcpio -p linux  
-syslinux-install_update -iam
+mkinitcpio -p linux
 ```
-then edit /boot/syslinux/syslinux.cfg if /dev/sda3 is not correct  
 
-Pacman...  
+Configure bootloader
+```
+pacman -S grub efibootmgr dosfstools os-prober mtools
+mkdir /boot/EFI
+mount /dev/sda1 /boot/EFI  #Mount FAT32 EFI partition 
+grub-install --target=x86_64-efi  --bootloader-id=grub_uefi --recheck
+# create the configuration:
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+Now we need to save the partion table of the system
+```
+exit
+genfstab -L -p /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+```
+
+Pacman...
 activate Color and multilib in /etc/pacman.conf
 
 Wireless network configuration
 ------------------------------
 ```
-pacman -S networkmanager  
-systemctl enable NetworkManager.service  
+pacman -S networkmanager
+systemctl enable NetworkManager.service
 ```
-list network: nmcli con show  
-connect to network: nmcli dev wifi connect <name> password <password> [iface wlan1]  
+list network: nmcli con show
+connect to network: nmcli dev wifi connect <name> password <password> [iface wlan1]
 or use the ncurse ui tool "nmtui"
+
+Remove sudo
+-----------
+
+sudo generate many security fail, to prevent it remove it
+```
+pacman -R sudo
+```
 
 Archlinux package config
 ------------------------
@@ -106,11 +127,11 @@ passwd
 Adding User
 -----------
 ```
-useradd -g users -m -s /bin/bash <username>  
+useradd -g users -m -s /bin/bash <username>
 ```
-Adding user to a group:  
+Adding user to a group:
 ```
-usermod -a -G <wheel,audio,video,disk,storage> <username>  
+usermod -a -G <wheel,audio,video,disk,storage,power> <username>
 ```
 Change pasword:
 ```
@@ -123,7 +144,7 @@ Misc
 
 X Server multi-user
 -------------------
-Edit /etc/pam.d/su su-l and add:  
+Edit /etc/pam.d/su su-l and add:
 ```
 session        optional        pam_xauth.so
 ```
