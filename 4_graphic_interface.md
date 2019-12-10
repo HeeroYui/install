@@ -8,13 +8,28 @@ Set first the Xautority:
 touch ~/.Xauthority
 ```
 
+Configure Xlayout in french:
+
+```
+vim "/etc/X11/xorg.conf.d/00-keyboard.conf"
+```
+
+```
+Section "InputClass"
+    Identifier         "Keyboard Layout"
+    #MatchIsKeyboard    "yes"
+    Option             "XkbLayout"  "fr"
+    Option             "XkbVariant" "latin9"
+EndSection
+```
+
+????
 ```
 pacman -S mesa
 pacman -S xf86-video-intel
 pacman -S bumblebee
 pacman -S xf86-video-nouveau
 ```
-
 gui
 ---
 ```
@@ -46,7 +61,7 @@ other gui tools
 ---------------
 ```
 # for open archive in gui
-pacman -S cfile-roller
+###### pacman -S cfile-roller
 # file explorer
 pacman -S thunar
 ```

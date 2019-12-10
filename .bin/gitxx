@@ -1,0 +1,27 @@
+#!/bin/bash
+
+
+#Generate absurdeDate : 
+
+#GIT_COMMITTER_DATE="2012-11-06T22:35" git commit --amend --date "2012-11-06T22:35"
+# get the curent Day
+CURRENT_DATE=`date +%Y-%m-%d`
+# genetae the new Hour
+randHeure=`expr $RANDOM % 3`
+nombreHeure=`expr 21 + $randHeure`
+# generate minutes :
+minute=`expr $RANDOM % 59`
+#generate second
+seconde=`expr $RANDOM % 59`
+
+LOCALTIME="$CURRENT_DATE T$nombreHeure:$minute:$seconde"
+
+echo Set the commit TIME : \"$LOCALTIME\"
+echo "export GIT_COMMITTER_DATE=\"$LOCALTIME\" ; git -c \"user.name=Edouard DUPIN\" -c \"edouard.dupin@vedecom.fr\" commit -a --date \"$LOCALTIME\" -m \"$*\""
+
+#plop=`GIT_COMMITTER_DATE=\"$LOCALTIME\" ; git commit -a --date \"$LOCALTIME\" -m \"$*\"`
+
+#echo $plop
+
+
+ 
