@@ -23,8 +23,15 @@ pacman -S ffmpeg
 ```
 
 
-# intal compatibility with new interface of ntfs disk
+# install compatibility with new interface of ntfs disk
 
 ```
 pacman -S ntfs-3g
 ```
+
+# install compatibility with new interface of ex FAT disk
+
+```
+pacman -S exfat-utils
+```
+ 	
