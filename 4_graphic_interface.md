@@ -36,7 +36,7 @@ other gui tools
 ---------------
 ```
 # for open archive in gui
-pacman -S cfile-roller
+###### pacman -S cfile-roller
 # file explorer
 pacman -S thunar
 ```
