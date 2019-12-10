@@ -6,18 +6,19 @@ touch ~/.Xauthority
 
 Configure Xlayout in french:
 
-'''
+```
 vim "/etc/X11/xorg.conf.d/00-keyboard.conf"
-'''
+```
 
-'''
+```
 Section "InputClass"
     Identifier         "Keyboard Layout"
     #MatchIsKeyboard    "yes"
     Option             "XkbLayout"  "fr"
     Option             "XkbVariant" "latin9"
 EndSection
-'''
+```
+
 gui
 ---
 ```
