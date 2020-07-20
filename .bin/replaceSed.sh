@@ -1,6 +1,7 @@
 #!/bin/bash
 
 listFiles=" `find . -name "*.php"`  "
+listFiles+=" `find . -name "*.java"`  "
 listFiles+=" `find . -name "*.cpp"`  "
 listFiles+=" `find . -name "*.cxx"`  "
 listFiles+=" `find . -name "*.c"`  "

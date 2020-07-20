@@ -55,12 +55,14 @@ mount /dev/sda3 /mnt
 mkdir /mnt/home
 mount /dev/sda4 /mnt/home
 swapon /dev/sda2
+mkdir -p /mnt/boot/efi
+mount -t vfat /dev/sda1 /mnt/boot/efi
 ```
 Install the base system
 -----------------------
 Replace \<foobar\> by what you want...
 ```
-pacstrap /mnt base base-devel vim git gptfdisk
+pacstrap /mnt base base-devel vim git gptfdisk linux linux-firmware
 arch-chroot /mnt
 echo <laptop-name> > /etc/hostname
 ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
@@ -75,9 +77,7 @@ mkinitcpio -p linux
 Configure bootloader
 ```
 pacman -S grub efibootmgr dosfstools os-prober mtools
-mkdir /boot/EFI
-mount /dev/sda1 /boot/EFI  #Mount FAT32 EFI partition 
-grub-install --target=x86_64-efi  --bootloader-id=grub_uefi --recheck
+grub-install --target=x86_64-efi  --bootloader-id=grub_uefi --recheck --efi-directory=/boot/efi
 # create the configuration:
 grub-mkconfig -o /boot/grub/grub.cfg
 ```

@@ -23,6 +23,9 @@ Section "InputClass"
 EndSection
 ```
 
+https://wiki.archlinux.fr/ATI
+
+
 ????
 ```
 pacman -S mesa
