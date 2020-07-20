@@ -98,9 +98,12 @@ parse_cvs_branch() {
 	fi
 }
 
-
-
+# for user
 PS1='\033]0;$(workspaceMode.sh \w) \W\007\r\[\033[01;32m\][ \h : \u ]\[\033[01;33m\]$(parse_git_branch)$(parse_svn_branch)$(parse_cvs_branch)\[\033[00m\]\[\033[01;34m\]\w\[\033[00m\]\n\$ '
+# for root
+#PS1='\033]0;$(workspaceMode.sh \w) \W\007\r\[\033[01;101m\][ \h : \u ]\[\033[01;33m\]$(parse_git_branch)$(parse_svn_branch)$(parse_cvs_branch)\[\033[00m\]\[\033[01;34m\]\w\[\033[00m\]\n\$ '
+
+
 
 #export UBUNTU_MENUPROXY=0
 export XAUTHORITY=/home/$USER/.Xauthority
